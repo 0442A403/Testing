@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -22,6 +25,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,10 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static SharedPreferences sPref;
     private static SharedPreferences.Editor editor;
-    public static final int RETURN=255,SAVE=-145,DONE=599;
-    public static final String COCO="coco";
-    public static TestsDataBase myDataBase;
-    public static AnswearsDataBase answDataBase;
+    public static final int RETURN = 255, SAVE = -145, DONE = 599;
+    public static final String COCO = "coco";
     public static Five fives[];
     private Handler handler;
     private Timer timer;
@@ -50,9 +59,30 @@ public class MainActivity extends AppCompatActivity {
         getLayoutInflater().inflate(R.layout.activity_main, layout);
         setContentView(layout);
         sPref=getSharedPreferences("APP_DATA",MODE_PRIVATE);
-        myDataBase = new TestsDataBase(getApplicationContext());
-        answDataBase = new AnswearsDataBase(getApplicationContext());
         editor = sPref.edit();
+
+        if (isNetworkConnected()) {
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            String url = "https://loploplop3.herokuapp.com/gettests.php";
+            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    start();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {}
+            });
+            queue.add(request);
+            queue.start();
+        }
+        else {
+            Toast.makeText(getBaseContext(), "Отсутствует интернет соединение", Toast.LENGTH_SHORT).show();
+            start();
+        }
+    }
+
+    private void start() {
         if (sPref.getString("first name","").length()>0&&sPref.getString("second name","").length()>0)
             startMenu();
         else
@@ -169,6 +199,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
+    }
+
     private class MyTimerTask extends TimerTask {
         @Override
         public void run() {
@@ -218,5 +254,45 @@ public class MainActivity extends AppCompatActivity {
         timer.cancel();
         timerTask.cancel();
         super.onDestroy();
+    }
+
+    private class Five {
+        ImageView five;
+        float unitX,unitY;
+        int  w ,h;
+        float c;
+        boolean disappearing;
+        int alpha;
+        Five(ImageView imageView) {
+            five = imageView;
+            w = Resources.getSystem().getDisplayMetrics().widthPixels;
+            h = Resources.getSystem().getDisplayMetrics().heightPixels;
+            unitX = w / 1000.f;
+            unitY = h / 1000.f;
+            teleport();
+            five.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    disappearing = true;
+                    return false;
+                }
+            });
+        }
+        void update() {
+            five.setY(five.getY() + unitY * c);
+            if (disappearing) {
+                alpha -= 6;
+                five.setImageAlpha(alpha);
+            }
+            if (five.getY() >= h || alpha <= 0)
+                teleport();
+        }
+        void teleport() {
+            five.setY(-unitY * new Random().nextInt(1001) - 400);
+            five.setX(unitX * (new Random().nextInt(1001 + five.getWidth()) - five.getWidth()));
+            c = new Random().nextInt(40) / 10.f + 2;
+            alpha = 255;
+            disappearing = false;
+        }
     }
 }

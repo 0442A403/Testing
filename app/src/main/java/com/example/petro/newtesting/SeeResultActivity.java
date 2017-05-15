@@ -1,7 +1,5 @@
 package com.example.petro.newtesting;
 
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -26,7 +24,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,9 +32,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.example.petro.newtesting.MainActivity.answDataBase;
-import static com.example.petro.newtesting.MainActivity.myDataBase;
 
 public class SeeResultActivity extends AppCompatActivity {
 //    ArrayList<ArrayList<String>> options;
