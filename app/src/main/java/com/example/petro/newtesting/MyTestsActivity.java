@@ -37,8 +37,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.petro.newtesting.MainActivity.answDataBase;
-import static com.example.petro.newtesting.MainActivity.myDataBase;
 
 public class MyTestsActivity extends AppCompatActivity {
     ArrayList<HashMap<String,Object>> myTests, relevance, helpArray;

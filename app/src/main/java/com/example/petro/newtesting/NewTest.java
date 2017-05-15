@@ -58,8 +58,6 @@ import java.util.Random;
 
 import static com.example.petro.newtesting.MainActivity.COCO;
 import static com.example.petro.newtesting.MainActivity.DONE;
-import static com.example.petro.newtesting.MainActivity.answDataBase;
-import static com.example.petro.newtesting.MainActivity.myDataBase;
 
 /**
  * Created by petro on 07.04.2017.

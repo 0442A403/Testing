@@ -2,20 +2,12 @@ package com.example.petro.newtesting;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
-import com.android.volley.Response;
-
-import org.json.JSONArray;
-
-import static com.example.petro.newtesting.MainActivity.answDataBase;
-import static com.example.petro.newtesting.MainActivity.myDataBase;
 
 public class MarkActivity extends AppCompatActivity {
     @Override

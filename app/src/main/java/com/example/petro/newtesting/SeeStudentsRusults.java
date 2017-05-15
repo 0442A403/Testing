@@ -29,8 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.example.petro.newtesting.MainActivity.COCO;
-import static com.example.petro.newtesting.MainActivity.answDataBase;
-import static com.example.petro.newtesting.MainActivity.myDataBase;
 
 public class SeeStudentsRusults extends AppCompatActivity {
     private ArrayList<HashMap<String,Object>> allAnswears,relevanceAnswears;

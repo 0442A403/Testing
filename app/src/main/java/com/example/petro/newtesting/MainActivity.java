@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void start() {
+        findViewById(R.id.progressBar).setVisibility(View.GONE);
         if (sPref.getString("first name","").length()>0&&sPref.getString("second name","").length()>0)
             startMenu();
         else
