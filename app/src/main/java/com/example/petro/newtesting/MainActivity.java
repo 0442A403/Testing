@@ -8,11 +8,8 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,64 +29,38 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.net.InetAddress;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static SharedPreferences sPref;
-    private static SharedPreferences.Editor editor;
-    public static final int RETURN = 255, SAVE = -145, DONE = 599;
+    public static final int SAVE = -145, DONE = 599;
     public static final String COCO = "coco";
-    public static Five fives[];
+    private static SharedPreferences sPref;
+    private Five fives[];
     private Handler handler;
     private Timer timer;
     private TimerTask timerTask;
-    public static boolean shootingFives = true;
-    public static ViewGroup BALDESHLayout;
-    private RelativeLayout layout;
-
+    private boolean shootingFives = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        layout = new RelativeLayout(this);
-        layout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        getLayoutInflater().inflate(R.layout.activity_main, layout);
-        setContentView(layout);
-        sPref=getSharedPreferences("APP_DATA",MODE_PRIVATE);
-        editor = sPref.edit();
+        super.onCreate(savedInstanceState);;
+        setContentView(R.layout.activity_main);
+        sPref = getSharedPreferences("APP_DATA",MODE_PRIVATE);
 
-        if (isNetworkConnected()) {
-            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            String url = "https://loploplop3.herokuapp.com/gettests.php";
-            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    start();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {}
-            });
-            queue.add(request);
-            queue.start();
+        try {
+            InetAddress ipAddr = InetAddress.getByName("https://loploplop3.herokuapp.com/");
+        } catch (Exception ignored) {
         }
-        else {
-            Toast.makeText(getBaseContext(), "Отсутствует интернет соединение", Toast.LENGTH_SHORT).show();
-            start();
-        }
-    }
 
-    private void start() {
         findViewById(R.id.progressBar).setVisibility(View.GONE);
         if (sPref.getString("first name","").length()>0&&sPref.getString("second name","").length()>0)
             startMenu();
         else
             fillFields();
         fives = new Five[30];
-        BALDESHLayout = ((ViewGroup)findViewById(R.id.BALDESH_layout));
+        ViewGroup BALDESHLayout = ((ViewGroup)findViewById(R.id.BALDESH_layout));
         for (byte i = 0; i < 30; i++) {
             ImageView imageView = new ImageView(this);
             imageView.setImageResource(R.drawable.five);
@@ -143,11 +114,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (edit1.length() > 0 && edit2.length() > 0) {
+                    SharedPreferences.Editor editor = sPref.edit();
                     editor.putString("first name", edit1.getText().toString());
                     editor.putString("second name", edit2.getText().toString());
-                    editor.commit();
-                    sPref=getSharedPreferences("APP_DATA",MODE_PRIVATE);
-                    editor=sPref.edit();
+                    editor.apply();
                     startMenu();
                 } else
                     Toast.makeText(getApplicationContext(), "Пожалуйста, заполните поля", Toast.LENGTH_LONG).show();
@@ -163,47 +133,36 @@ public class MainActivity extends AppCompatActivity {
         TextView createB = (TextView) findViewById(R.id.creatingButton);
         TextView seeResults = (TextView) findViewById(R.id.acitivity_main_my_tests);
 
-        ((TextView) findViewById(R.id.welcome)).setText("Здраствуй, " +
-                MainActivity.sPref.getString("second name", "") +
-                " "
-                + MainActivity.sPref.getString("first name", ""));
+        ((TextView) findViewById(R.id.welcome)).setText("Здравствуй, " + sPref.getString("second name", "")
+                + " " + sPref.getString("first name", ""));
         searchB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layout.removeView(BALDESHLayout);
                 startActivityForResult(new Intent(MainActivity.this, SearchingActivity.class),1);
             }
         });
         createB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layout.removeView(BALDESHLayout);
                 startActivity(new Intent(MainActivity.this, CreatingActivity.class));
             }
         });
         seeResults.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layout.removeView(BALDESHLayout);
                 startActivity(new Intent(MainActivity.this,MyTestsActivity.class));
             }
         });
         findViewById(R.id.edit_names).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences.Editor editor = sPref.edit();
                 editor.putString("first name","");
                 editor.putString("second name","");
-                editor.commit();
-                sPref=getSharedPreferences("APP_DATA",MODE_PRIVATE);
+                editor.apply();
                 fillFields();
             }
         });
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null;
     }
 
     private class MyTimerTask extends TimerTask {
@@ -227,13 +186,10 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode==DONE) {
             Intent intent=new Intent(MainActivity.this, MarkActivity.class);
             intent.putExtra("id", data.getIntExtra("id", -1));
-            Log.d("answer id now", String.valueOf(data.getIntExtra("id", -1)));
-            Log.d("answer id now2", String.valueOf(intent.getIntExtra("id", -1)));
             intent.putExtra("mark", data.getIntExtra("mark", -1));
             intent.putExtra("Show wrong", data.getIntExtra("Show wrong", 0));
             startActivity(intent);
         }
-
         startMenu();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
@@ -282,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         void update() {
             five.setY(five.getY() + unitY * c);
             if (disappearing) {
-                alpha -= 6;
+                alpha -= 7;
                 five.setImageAlpha(alpha);
             }
             if (five.getY() >= h || alpha <= 0)

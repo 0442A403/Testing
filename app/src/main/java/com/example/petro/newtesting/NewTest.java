@@ -1,14 +1,14 @@
 package com.example.petro.newtesting;
 
-import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.util.Pair;
@@ -18,10 +18,8 @@ import android.text.format.Time;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -30,17 +28,13 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -49,7 +43,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -85,43 +78,47 @@ public class NewTest extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.progress_bar);
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            id = getIntent().getIntExtra("code of test", -1);
+            queue = Volley.newRequestQueue(this);
+            String url = "https://loploplop3.herokuapp.com/gettest.php";
+            gson = new Gson();
 
-        id = getIntent().getIntExtra("code of test", -1);
-        queue = Volley.newRequestQueue(this);
-        String url = "https://loploplop3.herokuapp.com/gettest.php";
-        gson = new Gson();
-
-        Map<String, String> map = new HashMap<>();
-        map.put("id", String.valueOf(id));
-        JsonArrayPostRequest serverRequest = new JsonArrayPostRequest(url, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    JSONObject object = (JSONObject) response.get(0);
-                    curTask = gson.fromJson(object.toString(), CurrentTest.class);
-                    curTask.set();
-                    continueOnCreate();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            Map<String, String> map = new HashMap<>();
+            map.put("id", String.valueOf(id));
+            JsonArrayPostRequest serverRequest = new JsonArrayPostRequest(url, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    try {
+                        JSONObject object = (JSONObject) response.get(0);
+                        curTask = gson.fromJson(object.toString(), CurrentTest.class);
+                        curTask.set();
+                        continueOnCreate();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                Log.d("Error", "response error");
-            }
-        }, map);
-
-        queue.add(serverRequest);
-
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    Log.d("Error", "response error");
+                }
+            }, map);
+            queue.add(serverRequest);
+            queue.start();
+        }
+        else {
+            Toast.makeText(getBaseContext(), "Отсутствует интернет соединение", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     private void continueOnCreate() {
-
         setContentView(R.layout.activity_test);
-
-        inflater=getLayoutInflater().from(getBaseContext());
+        inflater = getLayoutInflater().from(getBaseContext());
         horizontalScrollView=(ViewGroup)findViewById(R.id.horizontalScrollViewItself);
         taskLayout=(LinearLayout)findViewById(R.id.taskLayoutItself);
         summaryLayout= (RelativeLayout) findViewById(R.id.summary);
@@ -260,6 +257,7 @@ public class NewTest extends AppCompatActivity {
     }
 
     private void finishTest() {
+        setContentView(R.layout.progress_bar);
         ArrayList<ArrayList<Boolean>> studentAnswears = new ArrayList<>();
         final ArrayList<String> studentAnswerM = new ArrayList<>();
 
@@ -393,8 +391,8 @@ public class NewTest extends AppCompatActivity {
         return false;
     }
 
-    class MyTimer extends CountDownTimer {
-        public MyTimer() {
+    private class MyTimer extends CountDownTimer {
+        MyTimer() {
             super(Integer.MAX_VALUE, 1000);
         }
 

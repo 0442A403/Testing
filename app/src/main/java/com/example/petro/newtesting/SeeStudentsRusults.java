@@ -1,7 +1,6 @@
 package com.example.petro.newtesting;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -28,14 +27,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.petro.newtesting.MainActivity.COCO;
-
 public class SeeStudentsRusults extends AppCompatActivity {
     private ArrayList<HashMap<String,Object>> allAnswears,relevanceAnswears;
     private SimpleAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.progress_bar);
 
         allAnswears = new ArrayList<>();
         relevanceAnswears = new ArrayList<>();

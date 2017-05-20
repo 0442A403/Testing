@@ -11,4 +11,10 @@
     <string name="next_question">Следующий</string>
     <string name="none_description" />
     <string name="scores">Баллы</string>
+    <string name="hello">Здравствуй!</string>
+    <string name="forward">ВПЕРЁД</string>
+    <string name="log_out">Log out</string>
+    <string name="my_tests">МОИ ТЕСТЫ</string>
+    <string name="find_tests">НАЙТИ ТЕСТ</string>
+    <string name="create_test">СОЗДАТЬ ТЕСТ</string>
 </resources>

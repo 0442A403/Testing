@@ -34,8 +34,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SeeResultActivity extends AppCompatActivity {
-//    ArrayList<ArrayList<String>> options;
-//    int taskCount;
     LayoutInflater inflater;
     ArrayList<ViewGroup> tasks;
     CurrentAnswer answer;
@@ -43,7 +41,7 @@ public class SeeResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_see_result);
+        setContentView(R.layout.progress_bar);
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = "https://loploplop3.herokuapp.com/getanswer.php";
@@ -57,7 +55,7 @@ public class SeeResultActivity extends AppCompatActivity {
                     JSONObject object = (JSONObject) response.get(0);
                     answer = new Gson().fromJson(object.toString(), CurrentAnswer.class);
                     answer.set();
-                    continueOnCreate1();
+                    getTest();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -73,7 +71,7 @@ public class SeeResultActivity extends AppCompatActivity {
         queue.add(answerRequest);
     }
 
-    private void continueOnCreate1() {
+    private void getTest() {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = "https://loploplop3.herokuapp.com/gettest.php";
         Map<String, String> map = new HashMap<>();
@@ -85,7 +83,7 @@ public class SeeResultActivity extends AppCompatActivity {
                     JSONObject object = (JSONObject) response.get(0);
                     test = new Gson().fromJson(object.toString(), CurrentTest.class);
                     test.set();
-                    continueOnCreate2();
+                    finishOnCreate();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -98,7 +96,9 @@ public class SeeResultActivity extends AppCompatActivity {
         }, map);
         queue.add(testRequest);
     }
-    private void continueOnCreate2() {
+    private void finishOnCreate() {
+        setContentView(R.layout.activity_see_result);
+
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,42,getResources().getDisplayMetrics());
 
         LinearLayout horizontalView = (LinearLayout) findViewById(R.id.child_of_see_results_horizontal_scroll_view);
@@ -109,22 +109,6 @@ public class SeeResultActivity extends AppCompatActivity {
         findViewById(R.id.see_results_horizontal_scroll_view).setHorizontalScrollBarEnabled(false );
 
         tasks=new ArrayList<>();
-//        ArrayList<Boolean> isRadio=new ArrayList<>();
-//        for (String str : testCursor.getString(testCursor.getColumnIndex("isRadio")).split("#"))
-//            isRadio.add(Integer.parseInt(str)==1);
-//        String[] questions=testCursor.getString(testCursor.getColumnIndex("questions")).split("#");
-//        taskCount=questions.length;
-//        options=new ArrayList<>();
-//        String[] helpString1=testCursor.getString(testCursor.getColumnIndex("options")).split("#");
-//        for (int i=0;i<taskCount;i++) {
-//            options.add(new ArrayList<String>());
-//            String[] helpString2=helpString1[i].split("`");
-//            for (String str:helpString2)
-//                options.get(i).add(str);
-//        }
-//        String[] studentAnswears=studentCursor.getString(studentCursor.getColumnIndex("ans")).split("#");
-//        String[] testAnswears=testCursor.getString(testCursor.getColumnIndex("rightAnswears")).split("#");
-//        String[] photos = testCursor.getString(14).split("#");
         for (int i = 0; i < test.size; i++) {
             Button b=new Button(getApplicationContext());
             b.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
@@ -142,9 +126,6 @@ public class SeeResultActivity extends AppCompatActivity {
             }
             tasks.add(currentTaskLayout);
 
-//            String[] studentCurrentTaskAnswears = studentAnswears[i].split("`");
-//            String[] testCurrentTaskAnswears=testAnswears[i].split("`");
-//            int len = testCurrentTaskAnswears.length;
             if (test.radioM[i]) {
                 for (int j = 0; j < test.tasksSizes.get(i); j++) {
                     RadioButton rb;

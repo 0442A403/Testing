@@ -2,23 +2,19 @@ package com.example.petro.newtesting;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,11 +28,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class MyTestsActivity extends AppCompatActivity {
     ArrayList<HashMap<String,Object>> myTests, relevance, helpArray;
@@ -48,6 +42,7 @@ public class MyTestsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.progress_bar);
 
         helpArray = new ArrayList<>();
         ids = new ArrayList<>();
@@ -83,7 +78,7 @@ public class MyTestsActivity extends AppCompatActivity {
                         helpArray.add(map);
                     }
                     Log.d("Response", "getmytests ended");
-                    continueOnCreate1();
+                    getAnswers();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -97,7 +92,7 @@ public class MyTestsActivity extends AppCompatActivity {
         queue.add(testRequest);
     }
 
-    private void continueOnCreate1() {
+    private void getAnswers() {
         Log.d("response", "contonue 1");
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = "https://loploplop3.herokuapp.com/getanswers.php";
@@ -131,7 +126,7 @@ public class MyTestsActivity extends AppCompatActivity {
                         myTests.add(0, map);
                         relevance.add(0, map);
                     }
-                    continueOnCreate2();
+                    finishOnCreate();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -145,7 +140,7 @@ public class MyTestsActivity extends AppCompatActivity {
         queue.add(testRequest);
     }
 
-    private void continueOnCreate2() {
+    private void finishOnCreate() {
         setContentView(R.layout.activity_searching);
         searchField=(EditText)findViewById(R.id.request);
         searchField.setHint("Название теста");
@@ -186,6 +181,7 @@ public class MyTestsActivity extends AppCompatActivity {
         StringRequest request = new StringRequest (Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Toast.makeText(getBaseContext(), "Тест удален", Toast.LENGTH_SHORT).show();
                 myTests.remove(itemIndex);
                 searchField.setText(searchField.getText());
             }

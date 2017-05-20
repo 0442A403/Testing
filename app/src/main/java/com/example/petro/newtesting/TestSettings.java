@@ -9,9 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -20,7 +18,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import static com.example.petro.newtesting.MainActivity.RETURN;
 import static com.example.petro.newtesting.MainActivity.SAVE;
 
 public class TestSettings extends AppCompatActivity {
@@ -74,7 +71,7 @@ public class TestSettings extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (progress<99) {
-                    thirdTV.setText(progress+"%");
+                    thirdTV.setText(progress + "%");
                     if (progress >= fourthSB.getProgress())
                         fourthSB.setProgress(progress+1);
                 }
@@ -131,7 +128,7 @@ public class TestSettings extends AppCompatActivity {
                         time += Integer.valueOf(seconds.getText().toString());
                     if (time > 0) {
                         if (time < 300 && setTimer.isChecked()) {
-                            dialogBox(time);
+                            dialogBox(time, "Вы выбрали время меньше 5 минут. Сохранить?");
                             return;
                         }
                         save(time);
@@ -140,14 +137,14 @@ public class TestSettings extends AppCompatActivity {
                     }
                 }
                 else
-                    save(0);
+                    dialogBox(0, "Сохранить?");
             }
         });
     }
 
-    public void dialogBox(final int time) {
+    public void dialogBox(final int time, final String str) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Вы выбрали время меньше 5 минут. Сохранить?");
+        alertDialogBuilder.setMessage(str);
         alertDialogBuilder.setPositiveButton("ОК",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -175,7 +172,7 @@ public class TestSettings extends AppCompatActivity {
         intent.putExtra("anonymity", ((CompoundButton)findViewById(R.id.anonymity)).isChecked());
         intent.putExtra("timer",setTimer.isChecked());
         intent.putExtra("time",time);
-        setResult(SAVE,intent);
+        setResult(SAVE, intent);
         finish();
     }
 

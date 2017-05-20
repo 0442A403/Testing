@@ -76,16 +76,15 @@ public class CreatingActivity extends AppCompatActivity {
     int px;
     private final int PICK_PHOTO=7888;
     private int indexOfPhotoTask=0;
-    private ArrayList<String> photos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creating);
-        setTitle("Новый тест");
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        px= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,35,getResources().getDisplayMetrics());
-        length=0;
+
+        px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,35,getResources().getDisplayMetrics());
+        length = 0;
         tasks=new ArrayList<>();
         testName=(EditText)findViewById(R.id.testName);
         Button additionButton=(Button)findViewById(R.id.addTask);
@@ -95,13 +94,17 @@ public class CreatingActivity extends AppCompatActivity {
         trueHorizontalScrollView.setHorizontalScrollBarEnabled(false);
         trueScrollView=(ScrollView)findViewById(R.id.trueScrollView);
         taskLayout=(ViewGroup)findViewById(R.id.taskLayout);
+
         additionButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 addTask();
             }
         });
+
         addTask();
+
         testName.requestFocus();
         Log.d(COCO,"Name1 focus");
         testName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -342,7 +345,7 @@ public class CreatingActivity extends AppCompatActivity {
             }, 100L);
         }
 
-        public void radioFunc() {
+        void radioFunc() {
             radioButtons.get(radioButtons.size()-1).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -354,7 +357,7 @@ public class CreatingActivity extends AppCompatActivity {
             });
         }
 
-        public boolean hasUnfill() {
+        boolean hasUnfill() {
             if (question.getText().length()==0) {
                 Toast.makeText(getApplicationContext(),"Введите вопрос",Toast.LENGTH_LONG).show();
                 question.requestFocus();
@@ -390,7 +393,7 @@ public class CreatingActivity extends AppCompatActivity {
             return true;
         }
 
-        public void changeInput() {
+        void changeInput() {
             if (isRadio) {
                 for (RadioButton rb:radioButtons)
                     rb.setVisibility(View.INVISIBLE);
@@ -412,101 +415,7 @@ public class CreatingActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode==SAVE) {
-//            Gson gson = new Gson();
-//
-//            ContentValues cv=new ContentValues();
-//            cv.put("name",testName.getText().toString());
-//            cv.put("autor",getSharedPreferences("APP_DATA",MODE_PRIVATE).getString("second name","Фамилия")+
-//                    " "+getSharedPreferences("APP_DATA",MODE_PRIVATE).getString("first name","Имя"));
-//            cv.put("showWrong",data.getBooleanExtra("showWrong",false));
-//            cv.put("anon",data.getBooleanExtra("anonymity",false));
-//            cv.put("five",data.getIntExtra("five",75));
-//            cv.put("four",data.getIntExtra("foure",50));
-//            cv.put("three",data.getIntExtra("three",25));
-//            cv.put("timer",data.getBooleanExtra("timer",false));
-//            cv.put("time",data.getIntExtra("time",0));
-//            cv.put("enabled", 1);
-//
-//            StringBuilder questons = new StringBuilder();
-//            StringBuilder options = new StringBuilder();
-//            StringBuilder rightAnswears = new StringBuilder();
-//            StringBuilder isRadio = new StringBuilder();
-//            StringBuilder scores = new StringBuilder();
-//            StringBuilder photos = new StringBuilder();
-//
-//            for (Task task:tasks) {
-//                questons.append(task.question.getText().toString()+"#");
-//                for (EditText option:task.options) {
-//                    options.append(option.getText().toString()+"`");
-//                }
-//                options.append('#');
-//                if (task.isRadio)
-//                    for (CompoundButton cb:task.radioButtons)
-//                        rightAnswears.append(cb.isChecked()?"1`":"0`");
-//                else
-//                    for (CompoundButton cb:task.checkBoxes)
-//                        rightAnswears.append(cb.isChecked()?"1`":"0`");
-//                rightAnswears.append("#");
-//                isRadio.append((task.isRadio?1:0)+"#");
-//                scores.append(task.scores.getText().toString()+"#");
-//                photos.append(task.imagePath + "#");
-//            }
-//
-//            Time now = new Time(Time.getCurrentTimezone());
-//            now.setToNow();
-//            String[] months = { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
-//            String date = now.hour + ":" + now.minute + ":" + now.second + " " +
-//                    now.monthDay + " " + months[now.month];
-//            cv.put("date",date);
-//
-//            cv.put("questions",questons.toString());
-//            cv.put("options",options.toString());
-//            cv.put("rightAnswears",rightAnswears.toString());
-//            cv.put("isRadio",isRadio.toString());
-//            cv.put("scores",scores.toString());
-//            cv.put("photos",photos.toString());
-//
-//            myDataBase.getWritableDatabase().insert("tests",null,cv);
-//            finish();
-
-//            final String name = testName.getText().toString();
-//            new AsyncTask<String, String, String>() {
-//                @Override
-//                protected String doInBackground(String... params) {
-
-//                    HttpClient httpClient = new DefaultHttpClient();
-//                    HttpPost httpPost = new HttpPost("https://loploplop3.herokuapp.com/addtest.php");
-//
-//                    List<NameValuePair> nameValuePairs = new ArrayList<>();
-//
-//                    nameValuePairs.add(new BasicNameValuePair("name", name));
-//                    nameValuePairs.add(new BasicNameValuePair("autor",getSharedPreferences("APP_DATA",MODE_PRIVATE).getString("second name","Фамилия")+
-//                            " "+getSharedPreferences("APP_DATA",MODE_PRIVATE).getString("first name","Имя")));
-////                    nameValuePairs.add(new BasicNameValuePair("showWrong", String.valueOf(data.getBooleanExtra("showWrong",false)? 1 : 0)));
-////                    nameValuePairs.add(new BasicNameValuePair("anon", String.valueOf(data.getBooleanExtra("anonymity",false)?1:0)));
-////                    nameValuePairs.add(new BasicNameValuePair("five", String.valueOf(data.getIntExtra("five",75))));
-////                    nameValuePairs.add(new BasicNameValuePair("four", String.valueOf(data.getIntExtra("four",50))));
-////                    nameValuePairs.add(new BasicNameValuePair("three", String.valueOf(data.getIntExtra("three",25))));
-////                    nameValuePairs.add(new BasicNameValuePair("time", String.valueOf(data.getIntExtra("time",0))));
-////                    nameValuePairs.add(new BasicNameValuePair("timer", String.valueOf(data.getBooleanExtra("timer", false)? 1 : 0)));
-//
-//                    try {
-//                        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
-//                        HttpResponse response = httpClient.execute(httpPost);
-//                        HttpEntity entity = response.getEntity();
-//
-//                        Log.d("Server response", EntityUtils.toString(entity));
-//                    } catch (UnsupportedEncodingException e) {
-//                        e.printStackTrace();
-//                    } catch (ClientProtocolException e) {
-//                        e.printStackTrace();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    return null;
-//                }
-//            }.execute("");
+            setContentView(R.layout.progress_bar);
 
             RequestQueue queue = Volley.newRequestQueue(this);
             String url = "https://loploplop3.herokuapp.com/addtest.php";
@@ -616,11 +525,15 @@ public class CreatingActivity extends AppCompatActivity {
                 if (requestCode == PICK_PHOTO && resultCode == RESULT_OK
                         && null != data) {
 
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+
                     Uri selectedImage = data.getData();
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                     Cursor cursor = getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
+                    assert cursor != null;
                     cursor.moveToFirst();
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -628,11 +541,11 @@ public class CreatingActivity extends AppCompatActivity {
                     cursor.close();
 
                     tasks.get(indexOfPhotoTask).image.setImageBitmap(BitmapFactory
-                            .decodeFile(imgDecodableString));
+                            .decodeFile(imgDecodableString/*, options*/));
                     tasks.get(indexOfPhotoTask).imagePath = imgDecodableString;
                     Log.d(COCO, "Photo's been added to " + indexOfPhotoTask + " task");
                 }
-            } catch (Exception e) {}
+            } catch (Exception ignored) {}
         }
     }
 
