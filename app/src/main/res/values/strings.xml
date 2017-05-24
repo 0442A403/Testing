@@ -17,4 +17,11 @@
     <string name="my_tests">МОИ ТЕСТЫ</string>
     <string name="find_tests">НАЙТИ ТЕСТ</string>
     <string name="create_test">СОЗДАТЬ ТЕСТ</string>
+    <string name="new_question">Новый вопрос</string>
+    <string name="_00">00</string>
+    <string name="colon">:</string>
+    <string name="timer">Таймер</string>
+    <string name="anonymity">Анонимно</string>
+    <string name="show_wrongs">Показывать ошибки</string>
+    <string name="_25">25%</string>
 </resources>

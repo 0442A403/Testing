@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:focusable="false">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/editText1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:capitalize="sentences"
-        android:hint="Новый вопрос"
+        android:inputType="textCapSentences"
+        android:hint="@string/new_question"
         android:textColorHint="@color/standartGray"
         android:textSize="20sp" />
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/none_description"/>
     <LinearLayout
         android:id="@+id/options"
         android:layout_width="match_parent"
@@ -26,7 +26,8 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +36,8 @@
             <ImageButton
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/ic_add_black_24dp"/>
+                android:background="@drawable/ic_add_black_24dp"
+                android:contentDescription="@string/none_description"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -45,7 +47,8 @@
             <ImageButton
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/ic_check_box_black_24dp"/>
+                android:background="@drawable/ic_check_box_black_24dp"
+                android:contentDescription="@string/none_description"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -55,7 +58,8 @@
             <ImageButton
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/ic_insert_photo_black_24dp"/>
+                android:background="@drawable/ic_insert_photo_black_24dp"
+                android:contentDescription="@string/none_description"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -65,7 +69,8 @@
             <ImageButton
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/ic_delete_black_24dp"/>
+                android:background="@drawable/ic_delete_black_24dp"
+                android:contentDescription="@string/none_description"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -73,12 +78,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:backgroundTint="@drawable/underline_selector"
         android:gravity="center_horizontal"
         android:hint="@string/scores"
         android:inputType="number"
-        android:textAllCaps="false"
         android:textColorHint="@color/standartGray"
-        android:textSize="15sp"
-        android:theme="@style/AppTheme" />
+        android:textSize="15sp"/>
+
 </LinearLayout>

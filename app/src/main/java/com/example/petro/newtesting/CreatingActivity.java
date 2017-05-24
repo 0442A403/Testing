@@ -8,14 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.net.Uri;
-import android.net.http.HttpResponseCache;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.Time;
-import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -43,23 +40,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.example.petro.newtesting.MainActivity.COCO;
@@ -88,7 +72,7 @@ public class CreatingActivity extends AppCompatActivity {
         tasks=new ArrayList<>();
         testName=(EditText)findViewById(R.id.testName);
         Button additionButton=(Button)findViewById(R.id.addTask);
-        inflater=LayoutInflater.from(getBaseContext());
+        inflater = LayoutInflater.from(getBaseContext());
         horizontalView=(ViewGroup) findViewById(R.id.horizontalScrollView);
         trueHorizontalScrollView=(HorizontalScrollView)findViewById(R.id.trueHorizontalScrollView);
         trueHorizontalScrollView.setHorizontalScrollBarEnabled(false);
@@ -166,8 +150,8 @@ public class CreatingActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     int len = horizontalView.getChildCount();
                     for (int i = 0; i < len; i++)
-                        horizontalView.getChildAt(i).getBackground().setColorFilter(getResources().getColor(R.color.standartButtonsColor), PorterDuff.Mode.SRC_ATOP);
-                    v.getBackground().setColorFilter(getResources().getColor(R.color.pressedButton), PorterDuff.Mode.SRC_ATOP);
+                        horizontalView.getChildAt(i).getBackground().setColorFilter(ContextCompat.getColor(CreatingActivity.this, R.color.standartButtonsColor), PorterDuff.Mode.SRC_ATOP);
+                    v.getBackground().setColorFilter(ContextCompat.getColor(CreatingActivity.this, R.color.pressedButton), PorterDuff.Mode.SRC_ATOP);
                     setTaskLayout(view);
                 }
             });
@@ -424,7 +408,6 @@ public class CreatingActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     Log.d("Server response", response);
-                    Log.d("debugging", "response");
                     Toast.makeText(getBaseContext(), "Тест создан", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -432,6 +415,9 @@ public class CreatingActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
+                    Log.e("Error", error.getMessage());
+                    Toast.makeText(getBaseContext(), "Извините, произошла ошибка", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }) {
                 @Override
@@ -498,12 +484,11 @@ public class CreatingActivity extends AppCompatActivity {
                     for (ArrayList<Boolean> help : rightAnswears)
                         helpCorrectArray.add(gson.toJson(help.toArray()));
 
-                    Time now = new Time(Time.getCurrentTimezone());
-                    now.setToNow();
+                    Calendar c = Calendar.getInstance();
                     String[] months = { "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"};
-                    String date = now.hour + ":" + now.minute + ":" + now.second + " " + now.monthDay + " " + months[now.month];
-                    params.put("date", date);
+                    String date = c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + " " + c.get(Calendar.DAY_OF_MONTH) + " " + months[c.get(Calendar.MONTH)];
 
+                    params.put("date", date);
                     params.put("questions", gson.toJson(questons.toArray()));
                     params.put("options", gson.toJson(helpOptionArray.toArray()));
                     params.put("correct", gson.toJson(helpCorrectArray.toArray()));

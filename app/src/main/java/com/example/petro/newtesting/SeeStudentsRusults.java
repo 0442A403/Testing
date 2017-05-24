@@ -69,7 +69,7 @@ public class SeeStudentsRusults extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                continueOnCreate();
             }
         },map);
         queue.add(serverRequest);

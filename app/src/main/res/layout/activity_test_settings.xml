@@ -119,12 +119,12 @@
                     android:id="@+id/thirdDecorator"
                     android:layout_alignStart="@id/thirdSeekBar"
                     android:layout_alignEnd="@id/thirdSeekBar"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/thirdSeekBar"
-                    android:text="25%"/>
+                    android:text="@string/_25"/>
             </RelativeLayout>
             <CheckBox
                 android:id="@+id/showWrong"
@@ -132,21 +132,21 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/three"
-                android:text="Показывать ошибки"/>
+                android:text="@string/show_wrongs"/>
             <CheckBox
                 android:id="@+id/anonymity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/showWrong"
-                android:text="Анонимно"/>
+                android:text="@string/anonymity"/>
             <CheckBox
                 android:id="@+id/set_timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/anonymity"
-                android:text="Таймер"/>
+                android:text="@string/timer"/>
             <RelativeLayout
                 android:id="@+id/layout_set_timer"
                 android:layout_width="match_parent"
@@ -160,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:text=":"
+                    android:text="@string/colon"
                     android:textSize="25sp"/>
                 <EditText
                     android:id="@+id/timer_minutes"
@@ -169,7 +169,7 @@
                     android:layout_toLeftOf="@id/help_test_setting_view"
                     android:inputType="number"
                     android:gravity="center"
-                    android:hint="00"
+                    android:hint="@string/_00"
                     android:maxLength="2"/>
                 <EditText
                     android:id="@+id/timer_seconds"
@@ -177,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/help_test_setting_view"
                     android:inputType="number"
-                    android:hint="00"
+                    android:hint="@string/_00"
                     android:gravity="center"
                     android:maxLength="2"/>
             </RelativeLayout>

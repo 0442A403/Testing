@@ -74,6 +74,7 @@ public class SearchingActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                continueOnCreate();
             }
         });
         queue.add(serverRequest);

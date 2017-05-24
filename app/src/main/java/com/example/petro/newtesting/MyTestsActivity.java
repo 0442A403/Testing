@@ -87,9 +87,11 @@ public class MyTestsActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                finishOnCreate();
             }
         }, map);
         queue.add(testRequest);
+
     }
 
     private void getAnswers() {
